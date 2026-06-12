@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Certified Administrator Mock Exam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom scrollbars for a clean look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-[#0176D3] text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center flex-wrap gap-2">
+            <div class="flex items-center space-x-3">
+                <!-- Salesforce Cloud SVG Logo -->
+                <svg class="w-10 h-10 fill-current" viewBox="0 0 24 24">
+                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                </svg>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Salesforce Certified Administrator</h1>
+                    <p class="text-xs text-blue-100 font-medium">Practice Exam Simulator (65 Questions)</p>
+                </div>
+            </div>
+            
+            <!-- Dynamic Status Indicators -->
+            <div id="active-exam-info" class="hidden flex items-center gap-4 bg-blue-800 bg-opacity-40 px-3 py-1.5 rounded-lg border border-blue-400">
+                <div class="text-sm font-medium">
+                    Mode: <span id="mode-badge" class="font-bold text-yellow-300">Exam</span>
+                </div>
+                <div class="h-4 w-[1px] bg-blue-500"></div>
+                <div class="flex items-center gap-1.5 text-sm font-medium">
+                    <svg class="w-4 h-4 text-yellow-300 animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path></svg>
+                    <span id="timer-display" class="font-mono font-bold tracking-wide">105:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Panel -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mt-6">
+            <div class="bg-gradient-to-r from-blue-600 to-[#0176D3] p-8 text-white text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Are you ready to pass?</h2>
+                <p class="text-blue-100 max-w-lg mx-auto text-sm md:text-base">
+                    This simulator provides a realistic, timed scenario mirroring the official Salesforce Platform Administrator exam blueprint.
+                </p>
+            </div>
+            
+            <div class="p-6 md:p-8 space-y-6">
+                <!-- Exam Blueprint details -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="text-xs text-blue-600 font-semibold uppercase tracking-wider">Questions</div>
+                        <div class="text-xl font-bold text-gray-800">65</div>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="text-xs text-blue-600 font-semibold uppercase tracking-wider">Passing Score</div>
+                        <div class="text-xl font-bold text-gray-800">65%</div>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="text-xs text-blue-600 font-semibold uppercase tracking-wider">Passing Target</div>
+                        <div class="text-xl font-bold text-gray-800">43 / 65</div>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="text-xs text-blue-600 font-semibold uppercase tracking-wider">Time Limit</div>
+                        <div class="text-xl font-bold text-gray-800">105 Mins</div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-6">
+                    <h3 class="font-bold text-gray-800 mb-3 text-base">Select Your Mode:</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- Mode choice cards -->
+                        <label class="relative flex flex-col p-4 bg-white border-2 border-blue-500 rounded-xl cursor-pointer hover:bg-gray-50 transition" id="label-exam-mode">
+                            <input type="radio" name="exam_mode" value="exam" checked class="absolute right-4 top-4 w-5 h-5 accent-blue-600" onclick="toggleModeSelection('exam')">
+                            <span class="font-bold text-gray-800 text-base flex items-center gap-1.5">
+                                Exam Mode 📝
+                            </span>
+                            <span class="text-xs text-gray-500 mt-2 leading-relaxed">
+                                Realistic test scenario. Dynamic countdown timer active. Feedback, explanations, and scores are revealed only after submission.
+                            </span>
+                        </label>
+                        
+                        <label class="relative flex flex-col p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition" id="label-practice-mode">
+                            <input type="radio" name="exam_mode" value="practice" class="absolute right-4 top-4 w-5 h-5 accent-blue-600" onclick="toggleModeSelection('practice')">
+                            <span class="font-bold text-gray-800 text-base flex items-center gap-1.5">
+                                Practice Mode 💡
+                            </span>
+                            <span class="text-xs text-gray-500 mt-2 leading-relaxed">
+                                No timer pressure. Shows whether your answer is correct instantly, detailing full rationales and standard practices on the spot.
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Syllabus breakdown accordion preview -->
+                <div class="bg-gray-50 p-4 rounded-xl text-xs text-gray-600 space-y-2">
+                    <div class="font-bold text-gray-700 uppercase mb-1">Exam Blueprint Weighting Breakdown:</div>
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span>Configuration & Setup</span> <span class="font-semibold">20%</span></div>
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span>Object Manager & Lightning App Builder</span> <span class="font-semibold">20%</span></div>
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span>Sales & Marketing Applications</span> <span class="font-semibold">12%</span></div>
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span>Service & Support Applications</span> <span class="font-semibold">11%</span></div>
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span>Data & Analytics Management</span> <span class="font-semibold">14%</span></div>
+                    <div class="flex justify-between"><span>Workflow/Process Automation</span> <span class="font-semibold">16%</span></div>
+                </div>
+
+                <div class="flex flex-col items-center pt-4">
+                    <button onclick="startExam()" class="w-full md:w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-center">
+                        Begin Simulator
+                    </button>
+                    <p class="text-[10px] text-gray-400 mt-2">By starting, you agree to comply with simulated test standards.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Application Canvas -->
+        <div id="quiz-container" class="hidden grid lg:grid-cols-4 gap-6 items-start mt-4">
+            
+            <!-- Left 3 Cols: Question & Options Card -->
+            <div class="lg:col-span-3 space-y-4">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-150 overflow-hidden">
+                    
+                    <!-- Progress Bar Header -->
+                    <div class="bg-gray-50 border-b border-gray-150 px-6 py-4 flex justify-between items-center flex-wrap gap-2">
+                        <span class="text-sm font-semibold text-gray-700">
+                            Question <span id="current-q-num" class="text-blue-600 font-bold">1</span> of 65
+                        </span>
+                        
+                        <div class="flex items-center gap-3">
+                            <!-- Topic Badge -->
+                            <span id="topic-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                Configuration & Setup
+                            </span>
+                            
+                            <!-- Mark for Review Checkbox -->
+                            <button id="flag-btn" onclick="toggleFlag()" class="flex items-center gap-1 px-3 py-1 text-xs font-medium border border-gray-200 rounded-lg hover:bg-gray-100 transition active:scale-95">
+                                <svg id="flag-icon" class="w-4 h-4 text-gray-400 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-19m0 0h5l1 2h9V10H13l-1-2H3"></path></svg>
+                                <span id="flag-text" class="text-gray-600">Review Flag</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar visualization -->
+                    <div class="w-full bg-gray-200 h-1.5">
+                        <div id="exam-progress-bar" class="bg-blue-600 h-1.5 transition-all duration-300" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <!-- Question Text -->
+                        <div class="space-y-1">
+                            <p id="question-text" class="text-gray-800 font-semibold text-lg leading-relaxed">
+                                Loading question body...
+                            </p>
+                        </div>
+
+                        <!-- Options Wrapper -->
+                        <div id="options-panel" class="space-y-3">
+                            <!-- Dynamically generated buttons/cards -->
+                        </div>
+
+                        <!-- Explanatory Box (Practice Mode Only) -->
+                        <div id="explanation-box" class="hidden bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-2">
+                            <h4 class="text-emerald-900 font-bold text-sm flex items-center gap-1.5">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Rationale & Solutions:
+                            </h4>
+                            <p id="explanation-text" class="text-emerald-850 text-xs leading-relaxed">
+                                Explanation detail goes here.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Action Controls -->
+                    <div class="bg-gray-50 border-t border-gray-150 px-6 py-4 flex justify-between items-center">
+                        <button id="prev-btn" onclick="prevQuestion()" class="px-5 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 transition active:scale-95 disabled:opacity-50 disabled:pointer-events-none">
+                            Previous
+                        </button>
+                        
+                        <div class="flex items-center gap-2">
+                            <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition active:scale-95">
+                                Next
+                            </button>
+                            <button id="submit-exam-btn" onclick="showSubmitConfirmation()" class="hidden px-6 py-2 text-sm font-bold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 transition active:scale-95 shadow-md shadow-emerald-100">
+                                Submit Exam
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right 1 Col: Question Grid Navigation Drawer -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-150 p-5 space-y-4">
+                <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">Question Tracker</h3>
+                    <span id="answered-counter-badge" class="text-xs bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-full">0/65 Answered</span>
+                </div>
+                
+                <!-- Quick Status Legend -->
+                <div class="flex flex-wrap gap-2 text-[10px] text-gray-500 font-medium">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-blue-600 rounded"></span> Active</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-emerald-100 border border-emerald-300 rounded"></span> Done</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-yellow-100 border border-yellow-300 rounded"></span> Review</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-gray-100 border border-gray-300 rounded"></span> Empty</span>
+                </div>
+
+                <!-- Grid of 65 questions -->
+                <div id="grid-nav" class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-5 gap-2 max-h-[300px] lg:max-h-[380px] overflow-y-auto pr-1">
+                    <!-- Javascript populates button 1 to 65 -->
+                </div>
+
+                <!-- Sidebar submission prompt -->
+                <div class="pt-2 border-t border-gray-100">
+                    <button onclick="showSubmitConfirmation()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-2.5 rounded-xl text-xs transition active:scale-95">
+                        Finish & Submit Exam
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Scoreboard Results Panel -->
+        <div id="results-screen" class="hidden max-w-4xl mx-auto space-y-6 mt-6">
+            
+            <!-- Summary Banner -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-150 overflow-hidden p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-4 text-center md:text-left">
+                    <div id="result-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold text-white bg-emerald-500">
+                        PASSED
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">
+                        Exam Results Summary
+                    </h2>
+                    <p class="text-sm text-gray-500 max-w-md leading-relaxed">
+                        The score reflects standard Salesforce criteria. Passing rate is 65% (Minimum of 43 correct answers).
+                    </p>
+                </div>
+                
+                <!-- Circular Score Chart -->
+                <div class="relative w-40 h-40 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle cx="80" cy="80" r="70" stroke-width="12" stroke="#e2e8f0" fill="transparent" />
+                        <circle id="score-circle" cx="80" cy="80" r="70" stroke-width="12" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round" stroke="#10b981" fill="transparent" class="transition-all duration-1000" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center justify-center">
+                        <span id="score-percentage" class="text-3xl font-black text-gray-800">0%</span>
+                        <span id="score-raw" class="text-xs text-gray-500 font-semibold">0 / 65</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review breakdown by Section -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-150 p-6 space-y-4">
+                <h3 class="font-bold text-gray-800 text-lg">Performance by Topic</h3>
+                <div id="section-breakdown-panel" class="space-y-3 text-sm">
+                    <!-- Generated via JS -->
+                </div>
+            </div>
+
+            <!-- Detailed Answers Review Panel -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-150 p-6 space-y-6">
+                <div class="flex justify-between items-center flex-wrap gap-2 border-b border-gray-100 pb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Review Question Sheet</h3>
+                    <div class="flex gap-2 text-xs">
+                        <button onclick="filterReviewList('all')" id="filter-btn-all" class="px-3 py-1.5 font-bold rounded-lg bg-blue-600 text-white shadow-sm">All (65)</button>
+                        <button onclick="filterReviewList('wrong')" id="filter-btn-wrong" class="px-3 py-1.5 font-medium rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700">Incorrect</button>
+                        <button onclick="filterReviewList('correct')" id="filter-btn-correct" class="px-3 py-1.5 font-medium rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700">Correct</button>
+                    </div>
+                </div>
+
+                <div id="review-list-panel" class="space-y-6">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Controls to restart -->
+            <div class="flex justify-center pt-4">
+                <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-100 transition active:scale-95">
+                    Retake Practice Exam
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer credits -->
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center border-t border-gray-700 text-xs mt-10">
+        <p class="max-w-md mx-auto px-4">
+            Practice materials are compiled according to official documentation rules. Salesforce, CRM, Lightning App Builder are registered trademarks of Salesforce, Inc.
+        </p>
+        <p class="mt-2 text-gray-500">Designed for Certification Candidates &copy; 2026</p>
+    </footer>
+
+    <!-- Custom Modal: Confirmation Dialog -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 p-6 space-y-4 animate-scaleUp">
+            <h3 id="modal-title" class="font-bold text-lg text-gray-800">Title</h3>
+            <p id="modal-message" class="text-sm text-gray-600 leading-relaxed">Message description</p>
+            <div class="flex justify-end gap-3 pt-2">
+                <button id="modal-cancel" class="px-4 py-2 text-xs font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition">Cancel</button>
+                <button id="modal-action" class="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Data Sheet and Game/Simulator Mechanics -->
+    <script>
+        // 65 high-quality, authentic questions based on CRT-101 official weighting
+        const questionsData = [
+            {
+                qNumber: 1,
+                topic: "Configuration & Setup",
+                question: "A user is leaving the company, but their active record cannot be deactivated because they are assigned as the sole approver in an active Approval Process. What standard action should the administrator take to block access immediately?",
+                options: [
+                    "Delete the user's login account entirely from the system.",
+                    "Freeze the user account from Setup.",
+                    "Modify the user's Profile to have zero accessibility parameters.",
+                    "Update the user's password to a random set of characters."
+                ],
+                correctIndex: 1,
+                rationale: "Freezing a user account blocks login access immediately without violating dependencies such as being the sole approver in an active Approval Process, an owner of a queue, or used in apex references."
+            },
+            {
+                qNumber: 2,
+                topic: "Security & Access",
+                question: "Which feature is used to control baseline record visibility (Record-Level Security) across the entire organization by default?",
+                options: [
+                    "Profiles",
+                    "Role Hierarchy",
+                    "Sharing Rules",
+                    "Organization-Wide Defaults (OWD)"
+                ],
+                correctIndex: 3,
+                rationale: "Organization-Wide Defaults (OWD) are the baseline level of security for records. If OWD is Private, only owners and those above them in the hierarchy can view them. Sharing rules and Roles are then used to expand permissions."
+            },
+            {
+                qNumber: 3,
+                topic: "Security & Access",
+                question: "The VP of Sales wants sales reps to only access Salesforce from the corporate headquarters' network and strictly between 8:00 AM and 6:00 PM. Where should this restriction be configured?",
+                options: [
+                    "In the Network Access menu under Setup",
+                    "On the individual Sales User records",
+                    "On the Sales Profile settings",
+                    "Within the Session Settings menu"
+                ],
+                correctIndex: 2,
+                rationale: "Login Hours and Login IP Ranges are enforced on the Profile level. If a user tries to log in from outside these hours or outside specified IP ranges, the platform blocks the request entirely."
+            },
+            {
+                qNumber: 4,
+                topic: "Security & Access",
+                question: "What is the primary function of Permission Sets in Salesforce?",
+                options: [
+                    "To restrict object permissions to a specific subset of users who have a broad Profile.",
+                    "To extend access and permissions to individual users without changing their current Profile.",
+                    "To define the page layout assignments and active Record Types.",
+                    "To manage the active user licenses allowed for custom objects."
+                ],
+                correctIndex: 1,
+                rationale: "Permission Sets are used to expand a user's functional capabilities (such as adding Delete access or System permissions) on top of their base Profile. Salesforce security practices dictate using Profiles to grant minimum access and Permission Sets to expand it."
+            },
+            {
+                qNumber: 5,
+                topic: "Security & Access",
+                question: "An administrator changes the OWD of a custom object 'Project' from Public Read/Write to Private. What immediate effect will this have on visibility?",
+                options: [
+                    "Only the record owner and users higher in the role hierarchy can access the records.",
+                    "All users can view Project records, but only owners can edit them.",
+                    "All sharing rules associated with the custom object are automatically deleted.",
+                    "The record owner loses the permission to delete their own records."
+                ],
+                correctIndex: 0,
+                rationale: "Setting an object's OWD to Private restricts access strictly to the owner and users superior in the Role Hierarchy (assuming Grant Access Using Hierarchies is active)."
+            },
+            {
+                qNumber: 6,
+                topic: "Object Manager & App Builder",
+                question: "A custom object 'Job Application' has a Master-Detail relationship with custom object 'Candidate' (Candidate is Master). What happens to associated Job Application records when a Candidate record is deleted?",
+                options: [
+                    "The Candidate field becomes blank (orphaned status).",
+                    "The Candidate record deletion is prevented by the system.",
+                    "The Job Application records are automatically soft-deleted as well.",
+                    "The Candidate records are moved to an inactive folder archive."
+                ],
+                correctIndex: 2,
+                rationale: "In a Master-Detail relationship, detail (child) records cannot exist independently. If the Master record is deleted, all detail records are automatically deleted via a cascading action."
+            },
+            {
+                qNumber: 7,
+                topic: "Object Manager & App Builder",
+                question: "An administrator needs to display the total sum of Opportunity values directly on the parent Account record. What field type should they create?",
+                options: [
+                    "Formula Field",
+                    "Roll-up Summary Field",
+                    "Parental Lookup Relationship",
+                    "Number Field with Flow Automation"
+                ],
+                correctIndex: 1,
+                rationale: "Although Account-to-Opportunity is technically a lookup behind the scenes, standard Salesforce architecture treats it like a Master-Detail relationship for Roll-up summaries, allowing you to sum, count, min, or max child values dynamically."
+            },
+            {
+                qNumber: 8,
+                topic: "Object Manager & App Builder",
+                question: "Which field type is always Read-Only on standard page detail layouts for end-users?",
+                options: [
+                    "Formula Fields",
+                    "Dependent Picklists",
+                    "Rich Text Fields",
+                    "External Lookup ID Fields"
+                ],
+                correctIndex: 0,
+                rationale: "Formula Fields calculate values dynamically at runtime based on parameters defined in their formulas. Because they are read-only dynamically calculated values, users cannot edit them directly."
+            },
+            {
+                qNumber: 9,
+                topic: "Object Manager & App Builder",
+                question: "A company wants sales teams to see distinct page layouts for Leads depending on whether the Lead source is 'Web' or 'Referral'. What is the best standard approach?",
+                options: [
+                    "Deploy two Custom Objects to manage Web and Referral separately.",
+                    "Create two Record Types and assign unique Page Layouts to each.",
+                    "Implement a Validation Rule to restrict field visibility dynamically.",
+                    "Configure Field-Level Security to hide unneeded fields based on picklists."
+                ],
+                correctIndex: 1,
+                rationale: "Record Types allow you to offer different business processes, picklist values, and Page Layouts to different users based on their specific work needs."
+            },
+            {
+                qNumber: 10,
+                topic: "Workflow/Process Automation",
+                question: "Which automation tool is officially recommended by Salesforce for building complex, interactive business guides and background processes going forward?",
+                options: [
+                    "Workflow Rules",
+                    "Process Builder",
+                    "Salesforce Flow",
+                    "Apex Trigger Suites"
+                ],
+                correctIndex: 2,
+                rationale: "Salesforce Flow is the standard declarative tool for all automation. Legacy tools like Workflow Rules and Process Builders are being phased out (deprecated)."
+            },
+            {
+                qNumber: 11,
+                topic: "Sales & Marketing Applications",
+                question: "Which three standard objects can optionally or automatically be created when a Qualified Lead is successfully converted?",
+                options: [
+                    "Account, Contact, Case",
+                    "Account, Contact, Opportunity",
+                    "Opportunity, Product, Contact",
+                    "Account, Opportunity, Campaign"
+                ],
+                correctIndex: 1,
+                rationale: "During standard Lead conversion, Salesforce creates an Account, a Contact, and optionally an Opportunity (which can be bypassed if checked)."
+            },
+            {
+                qNumber: 12,
+                topic: "Security & Access",
+                question: "The Customer Support Profile should not have any access to the Opportunity object. How can this requirement be met?",
+                options: [
+                    "Set the Organization-Wide Default of Opportunity to Private.",
+                    "Remove the 'Read', 'Create', 'Edit', and 'Delete' permissions on Opportunity in the Support Profile.",
+                    "Hide the Opportunity tab from the Support Application.",
+                    "Write a Validation Rule on Opportunity to prevent Support from saving records."
+                ],
+                correctIndex: 1,
+                rationale: "Object-level permissions (CRED) are managed via Profiles or Permission Sets. Removing these permissions completely blocks the Support Profile from accessing Opportunities."
+            },
+            {
+                qNumber: 13,
+                topic: "Configuration & Setup",
+                question: "Universal Containers has activated Multi-Currency. What is the main purpose of the designated 'Corporate Currency'?",
+                options: [
+                    "It is the only currency available for reporting and dashboards.",
+                    "It serves as the base exchange rate reference for calculating all other active currencies.",
+                    "It automatically updates standard rates based on live financial markets.",
+                    "It prevents users from selecting any other currency on their opportunities."
+                ],
+                correctIndex: 1,
+                rationale: "The Corporate Currency is the primary currency used by headquarters. It acts as the master record against which all other currency conversion rates are input and computed."
+            },
+            {
+                qNumber: 14,
+                topic: "Data & Analytics Management",
+                question: "An administrator tries to import 65,000 new Account records using the Data Import Wizard but gets an error. What is the cause?",
+                options: [
+                    "The Data Import Wizard does not support standard Account imports.",
+                    "The Data Import Wizard is capped at a maximum of 50,000 records per operation.",
+                    "Accounts must be loaded via Apex scripts if over 10,000.",
+                    "The administrator must map an External ID column before continuing."
+                ],
+                correctIndex: 1,
+                rationale: "The Data Import Wizard is designed for lighter business tasks and is hard-capped at 50,000 records per execution. For amounts up to 5,000,000 records, the desktop-based Data Loader tool is required."
+            },
+            {
+                qNumber: 15,
+                topic: "Security & Access",
+                question: "Which feature allows an administrator to delegate the capability to reset passwords and manage users within specific roles to a non-admin team lead?",
+                options: [
+                    "Delegated Administration",
+                    "System Permission Sets",
+                    "Sharing Rule Configurations",
+                    "Role Hierarchy Overrides"
+                ],
+                correctIndex: 0,
+                rationale: "Delegated Administration allows administrators to assign limited administrative privileges (like managing users in specific roles or custom objects) to designated non-admin users."
+            },
+            {
+                qNumber: 16,
+                topic: "Data & Analytics Management",
+                question: "If an administrator accidentally deletes a Custom Field, how long does the system retain the data before it is permanently purged?",
+                options: [
+                    "30 Days",
+                    "15 Days",
+                    "7 Days",
+                    "It is permanently deleted immediately."
+                ],
+                correctIndex: 1,
+                rationale: "Deleted custom fields and their data are stored for 15 days in the system's Recycle Bin state before a hard delete takes place."
+            },
+            {
+                qNumber: 17,
+                topic: "Data & Analytics Management",
+                question: "Which report format allows you to group data by both rows and columns dynamically, resembling an Excel pivot table?",
+                options: [
+                    "Tabular Report",
+                    "Summary Report",
+                    "Matrix Report",
+                    "Joined Report"
+                ],
+                correctIndex: 2,
+                rationale: "Matrix reports allow grouping of both rows and columns. They are ideal for viewing summaries of large volumes of data across multiple dimensions."
+            },
+            {
+                qNumber: 18,
+                topic: "Object Manager & App Builder",
+                question: "A sales manager wants to enforce that the 'Reason' picklist is only editable and limited to specific values when the Opportunity 'Stage' is marked 'Closed Lost'. How can this be done?",
+                options: [
+                    "Define a Dependent Picklist using Stage as Controlling and Reason as Dependent.",
+                    "Deploy two separate record types for active versus closed opportunities.",
+                    "Set Field-Level Security on Reason to Read-Only.",
+                    "Create an escalation trigger via Process Builder."
+                ],
+                correctIndex: 0,
+                rationale: "Dependent Picklists filter available options dynamically in a second field based on the value selected in the controlling field."
+            },
+            {
+                qNumber: 19,
+                topic: "Service & Support Applications",
+                question: "Universal Containers wants inbound Cases to automatically assign to specific Queues based on the Case Reason. Which feature should they use?",
+                options: [
+                    "Escalation Rules",
+                    "Auto-Response Rules",
+                    "Case Assignment Rules",
+                    "Validation Rules"
+                ],
+                correctIndex: 2,
+                rationale: "Assignment Rules automatically route incoming Leads or Cases to designated Users or Queues based on criteria defined by the administrator."
+            },
+            {
+                qNumber: 20,
+                topic: "Data & Analytics Management",
+                question: "A manager wants to view a dashboard with data tailored specifically to their own high-level permissions, even when viewed by subordinates. Which Dashboard setting achieves this?",
+                options: [
+                    "Run as Logged-In User",
+                    "Run as Specified User (Manager)",
+                    "Set Dashboard Folder access to Public View Only",
+                    "Configure as a Dynamic Dashboard"
+                ],
+                correctIndex: 1,
+                rationale: "Setting the 'Running User' to a 'Specified User' ensures that all viewers see data based on that specific user's sharing settings, regardless of their own access."
+            },
+            {
+                qNumber: 21,
+                topic: "Data & Analytics Management",
+                question: "How long are deleted records stored in the Salesforce Recycle Bin before being permanently purged?",
+                options: [
+                    "15 Days",
+                    "30 Days",
+                    "45 Days",
+                    "60 Days"
+                ],
+                correctIndex: 0,
+                rationale: "Deleted records remain in the Recycle Bin for 15 days before they are permanently deleted."
+            },
+            {
+                qNumber: 22,
+                topic: "Data & Analytics Management",
+                question: "Which native tool allows scheduling weekly complete backups of Salesforce data, including attachments?",
+                options: [
+                    "Data Loader command-line scripts",
+                    "Data Export Service (Weekly Export)",
+                    "Data Import Wizard",
+                    "Report Export functionality"
+                ],
+                correctIndex: 1,
+                rationale: "The Data Export Service (Weekly Export) is the standard native tool used to generate and download a comprehensive backup file of all org records and assets."
+            },
+            {
+                qNumber: 23,
+                topic: "Data & Analytics Management",
+                question: "Which dashboard component is best suited for showcasing a single key metric, such as 'Total Sales Revenue This Quarter'?",
+                options: [
+                    "Gauge Component",
+                    "Metric Component",
+                    "Donut Chart",
+                    "Lightning Table"
+                ],
+                correctIndex: 1,
+                rationale: "The Metric Component is designed to display a single, prominent numerical value to highlight key performance indicators (KPIs)."
+            },
+            {
+                qNumber: 24,
+                topic: "Sales & Marketing Applications",
+                question: "After converting a Lead, a custom text field 'Interest Level' is not mapping over to the newly created Contact. What configuration was missed?",
+                options: [
+                    "The field mapping in the Lead Conversion Page Layout",
+                    "The Lead Custom Field Mapping configuration in Setup",
+                    "A flow mapping the Lead to the Contact record",
+                    "A Validation Rule on Contact preventing the field from saving"
+                ],
+                correctIndex: 1,
+                rationale: "Custom fields on the Lead object must be explicitly mapped to custom fields on the Account, Contact, or Opportunity objects under the 'Map Lead Fields' setting in Object Manager."
+            },
+            {
+                qNumber: 25,
+                topic: "Object Manager & App Builder",
+                question: "What is the primary function of a Junction Object in Salesforce?",
+                options: [
+                    "To merge duplicate accounts and contacts",
+                    "To allow a Many-to-Many relationship between two objects",
+                    "To create a hierarchical relationship on the User object",
+                    "To link an automated Flow directly to a validation rule"
+                ],
+                correctIndex: 1,
+                rationale: "A Junction Object is a custom object with two Master-Detail relationships. It is used to connect two objects in a Many-to-Many relationship."
+            },
+            {
+                qNumber: 26,
+                topic: "Configuration & Setup",
+                question: "Users report that they cannot see the custom 'Fleet' object tab in their navigation bar. Which two areas should the administrator check?",
+                options: [
+                    "App Manager tab settings and Profile Tab Settings",
+                    "OWD Sharing model and Role Hierarchy configuration",
+                    "Permission Set Group permissions and Object validation rules",
+                    "Page Layout assignments and Record Type permissions"
+                ],
+                correctIndex: 0,
+                rationale: "To view a tab, it must be added to the App's utility/navigation items in App Manager, and the user's Profile Tab Settings must be set to 'Default On' or 'Default Off' (not Tab Hidden)."
+            },
+            {
+                qNumber: 27,
+                topic: "Security & Access",
+                question: "User A and User B share the same Profile. The administrator wants User A to have delete access on Account records, but not User B. What is the best solution?",
+                options: [
+                    "Create a new Profile for User A with Delete permissions.",
+                    "Assign a Sharing Rule to grant User A delete access.",
+                    "Create a Permission Set with Delete access on Accounts and assign it to User A.",
+                    "Move User A higher in the Role Hierarchy."
+                ],
+                correctIndex: 2,
+                rationale: "Permission Sets are designed to grant additional access to specific users on top of their Profile, maintaining a clean profile architecture."
+            },
+            {
+                qNumber: 28,
+                topic: "Service & Support Applications",
+                question: "Which feature can be used to generate an HTML form to place on a public company website, allowing customers to submit issues directly into Salesforce?",
+                options: [
+                    "Web-to-Lead",
+                    "Web-to-Case",
+                    "Email-to-Case",
+                    "Experience Cloud Portal"
+                ],
+                correctIndex: 1,
+                rationale: "Web-to-Case generates standard HTML that can be embedded on any public website to capture customer support inquiries directly as Cases."
+            },
+            {
+                qNumber: 29,
+                topic: "Object Manager & App Builder",
+                question: "When are Validation Rules executed during record save operations?",
+                options: [
+                    "Before data is saved to the database (Before Save)",
+                    "After Assignment Rules run",
+                    "After Workflow and Flow Email Alerts are sent",
+                    "Immediately when the user clicks 'Edit'"
+                ],
+                correctIndex: 0,
+                rationale: "Validation Rules run before record saving. If the validation formula evaluates to true, the save is blocked and an error message is displayed."
+            },
+            {
+                qNumber: 30,
+                topic: "Configuration & Setup",
+                question: "What is an absolute requirement to activate and allow a new user to log in to Salesforce?",
+                options: [
+                    "They must have an assigned Role.",
+                    "An available User License must be present in the org.",
+                    "A Manager must be assigned to their user record.",
+                    "They must be added to at least one active Queue."
+                ],
+                correctIndex: 1,
+                rationale: "Creating and activating a User requires an available User License that matches the selected Profile."
+            },
+            {
+                qNumber: 31,
+                topic: "Object Manager & App Builder",
+                question: "Where does an administrator configure standard buttons or custom quick actions to appear in the Highlights Panel on a Lightning Record Page?",
+                options: [
+                    "Within the Object Manager > Page Layouts > Salesforce Mobile and Lightning Experience Actions section",
+                    "In the Custom Buttons and Links setup menu",
+                    "Within the System Permission Sets",
+                    "Directly in the Lightning App Builder settings menu"
+                ],
+                correctIndex: 0,
+                rationale: "The Highlights Panel on a Lightning Page references actions defined in the 'Salesforce Mobile and Lightning Experience Actions' section of the assigned classic Page Layout."
+            },
+            {
+                qNumber: 32,
+                topic: "Data & Analytics Management",
+                question: "When should an administrator use Data Loader instead of the Data Import Wizard?",
+                options: [
+                    "To prevent duplicate records automatically",
+                    "To import over 50,000 records up to 5 million records",
+                    "To import custom objects without installing software",
+                    "To use a simple, web-based tool"
+                ],
+                correctIndex: 1,
+                rationale: "The Data Import Wizard has a 50,000 record limit. For larger data volumes up to 5,000,000 records, Data Loader should be used."
+            },
+            {
+                qNumber: 33,
+                topic: "Object Manager & App Builder",
+                question: "Which feature allows an administrator to prevent users from saving records with invalid values using logical formulas?",
+                options: [
+                    "Validation Rules",
+                    "Record Types",
+                    "Formula Fields",
+                    "Assignment Rules"
+                ],
+                correctIndex: 0,
+                rationale: "Validation Rules evaluate a user-defined logical formula. If it evaluates to True, it blocks the save operation and displays an error message."
+            },
+            {
+                qNumber: 34,
+                topic: "Workflow/Process Automation",
+                question: "Which declarative automation tool has the ability to delete records automatically based on specific criteria?",
+                options: [
+                    "Workflow Rules",
+                    "Process Builder",
+                    "Salesforce Flow",
+                    "Validation Rules"
+                ],
+                correctIndex: 2,
+                rationale: "Salesforce Flow is the only standard declarative tool that can perform the full range of DML operations, including deleting records."
+            },
+            {
+                qNumber: 35,
+                topic: "Sales & Marketing Applications",
+                question: "What is a 'Sales Process' in Salesforce?",
+                options: [
+                    "An interactive Flow guiding a rep through cold calls",
+                    "A configuration that controls picklist values in the 'Stage' field on Opportunity based on Record Type",
+                    "The underlying code that converts a Lead to an Opportunity",
+                    "An automated email sequence sent from Campaigns"
+                ],
+                correctIndex: 1,
+                rationale: "A Sales Process manages the Opportunity Stage picklist. Opportunity Record Types must map to an active Sales Process to determine which stages are available."
+            },
+            {
+                qNumber: 36,
+                topic: "Security & Access",
+                question: "If 'Grant Access Using Hierarchies' is unchecked for a Custom Object with OWD set to Private, who can view the records?",
+                options: [
+                    "Only the Record Owner and System Administrators",
+                    "The Record Owner and their managers in the Role Hierarchy",
+                    "Only System Administrators",
+                    "All members of an associated Public Group"
+                ],
+                correctIndex: 0,
+                rationale: "Unchecking 'Grant Access Using Hierarchies' disables the automatic upward sharing of records through the Role Hierarchy, restricting access to the record owner and users with 'View All Data' permissions (like System Administrators)."
+            },
+            {
+                qNumber: 37,
+                topic: "Configuration & Setup",
+                question: "When using the 'Login As Any User' feature, what must occur if administrators are not globally authorized to do so?",
+                options: [
+                    "The CEO must sign an authorization waiver.",
+                    "The end-user must explicitly grant login access to administrators from their personal account settings.",
+                    "Salesforce Support must enable a temporary back-end bypass.",
+                    "No authorization is required; administrators always have complete access."
+                ],
+                correctIndex: 1,
+                rationale: "Unless the global setting 'Administrators Can Log in as Any User' is enabled in Setup, individual users must grant login access from their personal settings before an admin can log in as them."
+            },
+            {
+                qNumber: 38,
+                topic: "Configuration & Setup",
+                question: "Which component of the Company Profile is unique and cannot be modified after a Salesforce Org is created?",
+                options: [
+                    "Company Name",
+                    "Corporate Currency",
+                    "Organization ID",
+                    "Default Time Zone"
+                ],
+                correctIndex: 2,
+                rationale: "The Organization ID is a unique 15-character alphanumeric identifier generated when the org is provisioned and cannot be changed."
+            },
+            {
+                qNumber: 39,
+                topic: "Security & Access",
+                question: "An administrator needs to restrict users from exporting Reports. How should they configure this?",
+                options: [
+                    "Remove the 'Export Reports' permission from the user's Profile or Permission Sets.",
+                    "Modify Folder Security settings to read-only on all Report folders.",
+                    "Set OWD sharing for Reports to Private.",
+                    "Remove the export buttons using App Manager."
+                ],
+                correctIndex: 0,
+                rationale: "Report exporting is controlled by the 'Export Reports' System Permission on the user's Profile or assigned Permission Sets."
+            },
+            {
+                qNumber: 40,
+                topic: "Security & Access",
+                question: "What are the three main pillars of record security in Salesforce?",
+                options: [
+                    "Object-level, Profile-level, User-level",
+                    "Object-level, Field-level, Record-level",
+                    "Network-level, Profile-level, Org-level",
+                    "App-level, Tab-level, Layout-level"
+                ],
+                correctIndex: 1,
+                rationale: "Salesforce security is designed in three layers: Object-level (permissions to tables), Field-level (permissions to columns), and Record-level (permissions to individual rows)."
+            },
+            {
+                qNumber: 41,
+                topic: "Workflow/Process Automation",
+                question: "Which type of Flow requires direct user interaction by displaying form screens and navigation buttons?",
+                options: [
+                    "Record-Triggered Flow",
+                    "Screen Flow",
+                    "Autolaunched Flow",
+                    "Scheduled-Triggered Flow"
+                ],
+                correctIndex: 1,
+                rationale: "Screen Flows include UI screens to guide users through business processes and collect inputs."
+            },
+            {
+                qNumber: 42,
+                topic: "Object Manager & App Builder",
+                question: "An administrator needs a dynamic way to display the age of a Case in days without storing the calculation in the database. What is the best solution?",
+                options: [
+                    "Create a Scheduled Flow to update a Number field nightly.",
+                    "Create a Formula Field using: TODAY() - DATEVALUE(CreatedDate).",
+                    "Configure a Time-Dependent Workflow Action.",
+                    "Create a Roll-up Summary Field."
+                ],
+                correctIndex: 1,
+                rationale: "Formula Fields calculate their value dynamically at runtime whenever a record is opened or referenced in a report, providing up-to-date values without consuming database update resources."
+            },
+            {
+                qNumber: 43,
+                topic: "Object Manager & App Builder",
+                question: "What is the maximum number of Master relationships a custom Junction Object can have?",
+                options: [
+                    "1",
+                    "2",
+                    "3",
+                    "There is no platform limit."
+                ],
+                correctIndex: 1,
+                rationale: "A Junction Object is defined by having exactly two Master-Detail relationships, linking multiple child records to two master records in a Many-to-Many relationship."
+            },
+            {
+                qNumber: 44,
+                topic: "Configuration & Setup",
+                question: "What is the native enterprise social collaboration tool built directly into Salesforce?",
+                options: [
+                    "Salesforce Slack",
+                    "Chatter",
+                    "Experience Cloud Forums",
+                    "Activities Feed"
+                ],
+                correctIndex: 1,
+                rationale: "Chatter is the native collaboration platform that allows users to share files, post status updates, create groups, and discuss records directly."
+            },
+            {
+                qNumber: 45,
+                topic: "Data & Analytics Management",
+                question: "Which reporting feature allows you to group data into ranges (like Small, Medium, Large) without creating a new custom field?",
+                options: [
+                    "Summary Formula",
+                    "Bucket Columns",
+                    "Cross Filters",
+                    "Row-Level Formulas"
+                ],
+                correctIndex: 1,
+                rationale: "Bucket Columns in Reports allow you to categorize record values into defined ranges (buckets) for grouping and sorting purposes without making database modifications."
+            },
+            {
+                qNumber: 46,
+                topic: "Workflow/Process Automation",
+                question: "What is the effect of locking a record during an active Approval Process?",
+                options: [
+                    "Only System Administrators and users with designated administrative permissions can edit the record.",
+                    "The record cannot be edited by anyone until it is approved or rejected.",
+                    "The record is hidden from reports and list views.",
+                    "The record owner loses ownership."
+                ],
+                correctIndex: 0,
+                rationale: "Record locking prevents standard users from editing a record while it is undergoing review. System Administrators and designated approvers can still edit locked records if configured to do so."
+            },
+            {
+                qNumber: 47,
+                topic: "Object Manager & App Builder",
+                question: "An administrator wants to embed a custom Lightning Web Component as a standalone tab in the navigation bar. Where should they create this tab?",
+                options: [
+                    "Lightning App Builder > Record Page",
+                    "Setup > Tabs > Lightning Component Tabs",
+                    "Setup > App Manager",
+                    "Object Manager"
+                ],
+                correctIndex: 1,
+                rationale: "To make a custom Lightning Web Component or Aura Component available in navigation, you must first define it as a Lightning Component Tab in Setup."
+            },
+            {
+                qNumber: 48,
+                topic: "Workflow/Process Automation",
+                question: "Which automation feature can be used to send an email notification if an Opportunity is not closed 5 days after its Close Date?",
+                options: [
+                    "Validation Rules",
+                    "Auto-Response Rules",
+                    "Scheduled Path in a Record-Triggered Flow",
+                    "Escalation Rules"
+                ],
+                correctIndex: 2,
+                rationale: "Scheduled Paths in Record-Triggered Flows allow you to run automated actions (like sending an email or updating a field) at a specific offset time relative to a date field on the record."
+            },
+            {
+                qNumber: 49,
+                topic: "Security & Access",
+                question: "A user reports receiving an 'Invalid Username and Password' error. When checking their login history, the status is listed as 'Restricted IP'. What does this mean?",
+                options: [
+                    "The user is attempting to log in outside of their Profile's Login Hours.",
+                    "The user is attempting to log in from an IP address not authorized in their Profile's Login IP Ranges.",
+                    "The org has not configured IP Trusted Ranges under Network Access.",
+                    "The user license has expired."
+                ],
+                correctIndex: 1,
+                rationale: "A status of 'Restricted IP' in the Login History indicates the user is attempting to log in from an unauthorized IP address outside the ranges specified on their Profile."
+            },
+            {
+                qNumber: 50,
+                topic: "Object Manager & App Builder",
+                question: "An organization wants to restrict users from applying discounts greater than 20% on opportunities. What feature should they use?",
+                options: [
+                    "Formula Field",
+                    "Validation Rule",
+                    "Approval Process",
+                    "Field-Level Security"
+                ],
+                correctIndex: 1,
+                rationale: "A Validation Rule can evaluate if a discount field value exceeds 0.20 and block the save operation if true."
+            },
+            {
+                qNumber: 51,
+                topic: "Security & Access",
+                question: "Where should an administrator go to manage inbound Single Sign-On (SSO) settings?",
+                options: [
+                    "Setup > Security > Single Sign-On Settings",
+                    "Company Profile > Security",
+                    "Network Access",
+                    "Object Manager"
+                ],
+                correctIndex: 0,
+                rationale: "Inbound Single Sign-On (SSO) settings (such as SAML configuration) are managed under 'Single Sign-On Settings' in the Setup menu."
+            },
+            {
+                qNumber: 52,
+                topic: "Data & Analytics Management",
+                question: "What permissions does a user need to merge duplicate Account records?",
+                options: [
+                    "The 'View All Data' permission on their profile.",
+                    "Edit access on Contacts.",
+                    "Read, Edit, and Delete access on the Account records being merged, as well as the 'Delete' permission on Accounts on their Profile.",
+                    "Only System Administrators can merge duplicate records."
+                ],
+                correctIndex: 2,
+                rationale: "Merging duplicate accounts requires Read and Edit access on the surviving master record, Delete access on the duplicate record being removed, and the Object-level Delete permission on Accounts."
+            },
+            {
+                qNumber: 53,
+                topic: "Sales & Marketing Applications",
+                question: "An administrator is setting up custom fields to map from Leads to Contacts. What is a key requirement for the target custom fields?",
+                options: [
+                    "The target fields must have the exact same API name.",
+                    "The target field types must be compatible with the source field types.",
+                    "The target fields must be Formula fields.",
+                    "The target fields must be marked as External IDs."
+                ],
+                correctIndex: 1,
+                rationale: "Custom fields must map to target fields of a compatible data type (e.g., text to text, picklist to picklist) for Lead conversion mapping to work."
+            },
+            {
+                qNumber: 54,
+                topic: "Workflow/Process Automation",
+                question: "Which Flow element is used to retrieve record data from the Salesforce database to use in your flow logic?",
+                options: [
+                    "Update Records",
+                    "Create Records",
+                    "Get Records",
+                    "Decision"
+                ],
+                correctIndex: 2,
+                rationale: "The 'Get Records' element queries the database based on criteria you define and stores the retrieved values in variables."
+            },
+            {
+                qNumber: 55,
+                topic: "Security & Access",
+                question: "What happens to manual sharing access on an Account record when the ownership of that record changes?",
+                options: [
+                    "Manual sharing access is retained.",
+                    "Users with manual access are granted edit permissions.",
+                    "All manual sharing access is automatically removed.",
+                    "The new owner must approve existing manual sharing."
+                ],
+                correctIndex: 2,
+                rationale: "To maintain security, changing a record's owner automatically removes any manual sharing access created by the previous owner."
+            },
+            {
+                qNumber: 56,
+                topic: "Data & Analytics Management",
+                question: "What is the maximum number of Custom Summary Formulas allowed in a single Report?",
+                options: [
+                    "2",
+                    "3",
+                    "5",
+                    "10"
+                ],
+                correctIndex: 2,
+                rationale: "Salesforce limits reports to a maximum of 5 Custom Summary Formulas."
+            },
+            {
+                qNumber: 57,
+                topic: "Data & Analytics Management",
+                question: "What is the first step an administrator must take to track historical changes to the 'Stage' field on Opportunities?",
+                options: [
+                    "Create an Analytical Snapshot.",
+                    "Enable Field History Tracking for Opportunities and check the Stage field.",
+                    "Create a Workflow Rule to log changes to the Activities history.",
+                    "Use the Login History log."
+                ],
+                correctIndex: 1,
+                rationale: "To track field history, you must first enable 'Field History Tracking' in Object Manager for that object and select the specific fields you want to track."
+            },
+            {
+                qNumber: 58,
+                topic: "Configuration & Setup",
+                question: "What are the three primary types of licenses managed by an administrator?",
+                options: [
+                    "Cloud, Desktop, and Mobile Licenses",
+                    "User Licenses, Feature Licenses, and Permission Set Licenses",
+                    "Standard, Custom, and Managed Licenses",
+                    "Sales, Service, and Marketing Licenses"
+                ],
+                correctIndex: 1,
+                rationale: "The three primary license categories are User Licenses (determines baseline profile access), Feature Licenses (grants access to additional features like Knowledge), and Permission Set Licenses (grants access to additional permission sets)."
+            },
+            {
+                qNumber: 59,
+                topic: "Configuration & Setup",
+                question: "Which Setup tool provides a quick overview of your org's configuration limits, such as data storage, file storage, API requests, and custom fields?",
+                options: [
+                    "Schema Builder",
+                    "System Overview",
+                    "Company Information",
+                    "Salesforce Optimizer"
+                ],
+                correctIndex: 1,
+                rationale: "The 'System Overview' page in Setup displays data usage, API limit usage, and schema limits (like custom objects and custom fields) in one view."
+            },
+            {
+                qNumber: 60,
+                topic: "Service & Support Applications",
+                question: "A support agent is unable to view or access Knowledge Articles. What is the most likely cause?",
+                options: [
+                    "The Article record type is incorrect.",
+                    "The agent does not have the 'Knowledge User' feature license checked on their User record.",
+                    "The agent has an unstable internet connection.",
+                    "The agent's role needs to be updated."
+                ],
+                correctIndex: 1,
+                rationale: "Accessing and managing Knowledge articles requires the 'Knowledge User' feature license to be enabled on the individual's User record."
+            },
+            {
+                qNumber: 61,
+                topic: "Object Manager & App Builder",
+                question: "What would prevent an administrator from deleting a custom object?",
+                options: [
+                    "The object is referenced in an active Page Layout.",
+                    "The object is referenced in an active Apex Class or Flow.",
+                    "There are active records in the Recycle Bin.",
+                    "The profiles have not been updated."
+                ],
+                correctIndex: 1,
+                rationale: "Salesforce blocks the deletion of any metadata (such as custom fields or objects) that is referenced elsewhere in the system, like in Apex classes, triggers, or active Flows, to prevent runtime errors."
+            },
+            {
+                qNumber: 62,
+                topic: "Workflow/Process Automation",
+                question: "According to the Salesforce Order of Execution, which step runs first during a save operation?",
+                options: [
+                    "System Validation Rules",
+                    "Assignment Rules",
+                    "Workflow Rules",
+                    "After-Save Flows"
+                ],
+                correctIndex: 0,
+                rationale: "System validation rules (such as checking required fields and data format compatibility) are executed first before custom validation rules or automation rules are run."
+            },
+            {
+                qNumber: 63,
+                topic: "Data & Analytics Management",
+                question: "Which Dashboard feature allows users to filter the displayed data (e.g., by Country or Region) on the fly?",
+                options: [
+                    "Report Filters",
+                    "Dashboard Filters",
+                    "Dynamic Dashboard",
+                    "Dashboard Subscription"
+                ],
+                correctIndex: 1,
+                rationale: "Dashboard Filters let viewers filter the metrics shown on a dashboard dynamically using custom filter values (like State or Industry) without needing to edit the underlying reports."
+            },
+            {
+                qNumber: 64,
+                topic: "Workflow/Process Automation",
+                question: "A sales representative wants to receive an instant task assignment whenever a high-value customer leaves a low score on a custom feedback record. Which automation tool is best suited for this?",
+                options: [
+                    "Assignment Rules",
+                    "Approval Process",
+                    "Record-Triggered Flow",
+                    "Validation Rule"
+                ],
+                correctIndex: 2,
+                rationale: "Record-Triggered Flows are designed to perform complex logic (like creating and assigning a task, sending notifications) immediately when records are created or updated."
+            },
+            {
+                qNumber: 65,
+                topic: "Configuration & Setup",
+                question: "What is the primary benefit of using a Sandbox environment?",
+                options: [
+                    "It improves the performance of the production org.",
+                    "It provides a safe, isolated copy of production for testing, training, and development without risking active data.",
+                    "It is restricted only to certified developers.",
+                    "It replaces the need for AppExchange apps."
+                ],
+                correctIndex: 1,
+                rationale: "Sandboxes allow developers and administrators to develop, test, and train safely in an isolated clone of the production environment without impacting production users or data."
+            }
+        ];
+
+        // Simulation State Engine
+        let currentQuestionIndex = 0;
+        let selectedAnswers = new Array(questionsData.length).fill(null);
+        let flaggedQuestions = new Array(questionsData.length).fill(false);
+        let examMode = 'exam'; // 'exam' or 'practice'
+        let timerInterval = null;
+        let totalSeconds = 105 * 60; // 105 minutes
+        let isExamFinished = false;
+
+        // On Load initialization
+        window.onload = function() {
+            renderGridNavigation();
+            updateAnsweredCount();
+        };
+
+        // Controls welcome page modes selection UI
+        function toggleModeSelection(mode) {
+            examMode = mode;
+            const labelExam = document.getElementById('label-exam-mode');
+            const labelPractice = document.getElementById('label-practice-mode');
+            
+            if (mode === 'exam') {
+                labelExam.className = "relative flex flex-col p-4 bg-white border-2 border-blue-500 rounded-xl cursor-pointer hover:bg-gray-50 transition";
+                labelPractice.className = "relative flex flex-col p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition";
+            } else {
+                labelPractice.className = "relative flex flex-col p-4 bg-white border-2 border-blue-500 rounded-xl cursor-pointer hover:bg-gray-50 transition";
+                labelExam.className = "relative flex flex-col p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition";
+            }
+        }
+
+        // Starts the simulation
+        function startExam() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            
+            const activeInfo = document.getElementById('active-exam-info');
+            activeInfo.classList.remove('hidden');
+            
+            const badge = document.getElementById('mode-badge');
+            if (examMode === 'exam') {
+                badge.innerText = "Exam";
+                badge.className = "font-bold text-yellow-300";
+                startTimer();
+            } else {
+                badge.innerText = "Practice";
+                badge.className = "font-bold text-emerald-300";
+                document.getElementById('timer-display').innerText = "Unlimited";
+            }
+
+            loadQuestion(0);
+        }
+
+        // Clock timer routine
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                totalSeconds--;
+                updateTimerDisplay();
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            if (examMode !== 'exam') return;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('timer-display').innerText = formatted;
+        }
+
+        // Displays a question
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questionsData[index];
+            
+            // Header updates
+            document.getElementById('current-q-num').innerText = index + 1;
+            document.getElementById('topic-badge').innerText = q.topic;
+            document.getElementById('question-text').innerText = q.question;
+            
+            // Progress Bar
+            const percent = ((index + 1) / questionsData.length) * 100;
+            document.getElementById('exam-progress-bar').style.width = `${percent}%`;
+
+            // Reset Explanations for Practice Mode
+            const expBox = document.getElementById('explanation-box');
+            expBox.classList.add('hidden');
+            document.getElementById('explanation-text').innerText = q.rationale;
+
+            // Flags
+            updateFlagUI();
+
+            // Load options
+            const optionsPanel = document.getElementById('options-panel');
+            optionsPanel.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const optButton = document.createElement('button');
+                optButton.className = "w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition duration-150 flex items-start gap-3 focus:outline-none";
+                
+                // Bullet icon / indicator
+                const bullet = document.createElement('span');
+                bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full border border-gray-300 text-xs font-semibold text-gray-500 bg-gray-50";
+                bullet.innerText = String.fromCharCode(65 + idx); // A, B, C, D
+                
+                const optText = document.createElement('span');
+                optText.className = "text-sm text-gray-700 font-medium pt-0.5 leading-relaxed";
+                optText.innerText = opt;
+
+                optButton.appendChild(bullet);
+                optButton.appendChild(optText);
+
+                // Option action click
+                optButton.onclick = () => selectOption(idx, optButton);
+
+                optionsPanel.appendChild(optButton);
+            });
+
+            // Adjust navigation buttons visibility
+            document.getElementById('prev-btn').disabled = (index === 0);
+            
+            if (index === questionsData.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-exam-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('submit-exam-btn').classList.add('hidden');
+            }
+
+            // Sync visual active styling on previously selected answers or immediate checks
+            restoreSelections();
+            syncGridHighlight();
+        }
+
+        // Actions when selecting an option
+        function selectOption(optionIndex, optBtnElement) {
+            if (isExamFinished) return;
+
+            // Save state
+            selectedAnswers[currentQuestionIndex] = optionIndex;
+            updateAnsweredCount();
+            renderGridNavigation();
+
+            if (examMode === 'practice') {
+                // Instantly grade the selection and lock other options
+                const q = questionsData[currentQuestionIndex];
+                const allButtons = document.getElementById('options-panel').children;
+                
+                // Highlight choice
+                for (let i = 0; i < allButtons.length; i++) {
+                    const btn = allButtons[i];
+                    const bullet = btn.children[0];
+                    
+                    btn.disabled = true; // disable to prevent multiple inputs
+
+                    if (i === q.correctIndex) {
+                        // Correct Option Highlight
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white";
+                    } else if (i === optionIndex) {
+                        // Wrong Option Highlight
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl border border-gray-150 bg-gray-50 opacity-60 flex items-start gap-3 focus:outline-none";
+                    }
+                }
+
+                // Show Explanation box
+                const expBox = document.getElementById('explanation-box');
+                expBox.classList.remove('hidden');
+
+            } else {
+                // Exam Mode: Just highlight selection visually
+                const allButtons = document.getElementById('options-panel').children;
+                for (let i = 0; i < allButtons.length; i++) {
+                    const btn = allButtons[i];
+                    const bullet = btn.children[0];
+                    if (i === optionIndex) {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-blue-500 bg-blue-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full border border-gray-300 text-xs font-semibold text-gray-500 bg-gray-50";
+                    }
+                }
+            }
+        }
+
+        // Re-applies past selections visually
+        function restoreSelections() {
+            const savedIdx = selectedAnswers[currentQuestionIndex];
+            if (savedIdx === null) return;
+
+            const allButtons = document.getElementById('options-panel').children;
+            
+            if (examMode === 'practice') {
+                const q = questionsData[currentQuestionIndex];
+                // In Practice mode, rebuild graded view
+                for (let i = 0; i < allButtons.length; i++) {
+                    const btn = allButtons[i];
+                    const bullet = btn.children[0];
+                    btn.disabled = true;
+
+                    if (i === q.correctIndex) {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white";
+                    } else if (i === savedIdx) {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl border border-gray-150 bg-gray-50 opacity-60 flex items-start gap-3 focus:outline-none";
+                    }
+                }
+                document.getElementById('explanation-box').classList.remove('hidden');
+            } else {
+                // Re-apply standard highlight for Exam Mode
+                for (let i = 0; i < allButtons.length; i++) {
+                    const btn = allButtons[i];
+                    const bullet = btn.children[0];
+                    if (i === savedIdx) {
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-blue-500 bg-blue-50 flex items-start gap-3 focus:outline-none";
+                        bullet.className = "w-6 h-6 shrink-0 flex items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white";
+                    }
+                }
+            }
+        }
+
+        // Next and Prev functions
+        function nextQuestion() {
+            if (currentQuestionIndex < questionsData.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 2); // Wait, index adjustments
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        // Review flag status toggle
+        function toggleFlag() {
+            flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+            updateFlagUI();
+            renderGridNavigation();
+        }
+
+        function updateFlagUI() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            const flagIcon = document.getElementById('flag-icon');
+            const flagText = document.getElementById('flag-text');
+            const flagBtn = document.getElementById('flag-btn');
+
+            if (isFlagged) {
+                flagIcon.className = "w-4 h-4 text-amber-500 fill-amber-500";
+                flagText.className = "text-amber-600 font-bold";
+                flagBtn.className = "flex items-center gap-1 px-3 py-1 text-xs font-semibold border border-amber-300 rounded-lg bg-amber-50 hover:bg-amber-100 transition active:scale-95";
+            } else {
+                flagIcon.className = "w-4 h-4 text-gray-400 fill-none";
+                flagText.className = "text-gray-600";
+                flagBtn.className = "flex items-center gap-1 px-3 py-1 text-xs font-medium border border-gray-200 rounded-lg hover:bg-gray-100 transition active:scale-95";
+            }
+        }
+
+        // Navigation grid render routine
+        function renderGridNavigation() {
+            const gridNav = document.getElementById('grid-nav');
+            gridNav.innerHTML = '';
+
+            questionsData.forEach((_, idx) => {
+                const navBtn = document.createElement('button');
+                navBtn.className = getGridButtonClass(idx);
+                navBtn.innerText = idx + 1;
+                navBtn.onclick = () => loadQuestion(idx);
+                gridNav.appendChild(navBtn);
+            });
+        }
+
+        function getGridButtonClass(idx) {
+            let base = "h-9 w-full text-xs font-bold rounded-lg border flex items-center justify-center transition active:scale-90 ";
+            
+            if (idx === currentQuestionIndex) {
+                base += "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-100 ring-2 ring-blue-300 ring-offset-1";
+            } else if (flaggedQuestions[idx]) {
+                base += "border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100";
+            } else if (selectedAnswers[idx] !== null) {
+                base += "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100";
+            } else {
+                base += "border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100";
+            }
+
+            return base;
+        }
+
+        function syncGridHighlight() {
+            // Update only current active visually
+            const children = document.getElementById('grid-nav').children;
+            for (let i = 0; i < children.length; i++) {
+                children[i].className = getGridButtonClass(i);
+            }
+        }
+
+        function updateAnsweredCount() {
+            const answered = selectedAnswers.filter(a => a !== null).length;
+            document.getElementById('answered-counter-badge').innerText = `${answered}/${questionsData.length} Answered`;
+        }
+
+        // Standard confirm overlay
+        function showCustomModal(title, msg, onConfirm) {
+            const modal = document.getElementById('custom-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = msg;
+            
+            const cancelBtn = document.getElementById('modal-cancel');
+            const actionBtn = document.getElementById('modal-action');
+
+            cancelBtn.onclick = () => modal.classList.add('hidden');
+            actionBtn.onclick = () => {
+                modal.classList.add('hidden');
+                onConfirm();
+            };
+
+            modal.classList.remove('hidden');
+        }
+
+        function showSubmitConfirmation() {
+            const unanswered = questionsData.length - selectedAnswers.filter(a => a !== null).length;
+            let warningText = "Are you sure you want to finalize and submit your exam answers for scoring?";
+            if (unanswered > 0) {
+                warningText += ` Warning: You have left ${unanswered} question(s) blank. These will be marked as incorrect.`;
+            }
+
+            showCustomModal(
+                "Submit Exam?",
+                warningText,
+                () => {
+                    finishExam();
+                }
+            );
+        }
+
+        function autoSubmitExam() {
+            // Force submission due to timeout
+            clearInterval(timerInterval);
+            isExamFinished = true;
+            finishExam(true);
+        }
+
+        // Finalizes test scoring
+        let filteredReviewType = 'all';
+
+        function finishExam(isTimeout = false) {
+            clearInterval(timerInterval);
+            isExamFinished = true;
+
+            // Compute correct / incorrect answers
+            let correctCount = 0;
+            questionsData.forEach((q, idx) => {
+                if (selectedAnswers[idx] === q.correctIndex) {
+                    correctCount++;
+                }
+            });
+
+            const scorePercent = Math.round((correctCount / questionsData.length) * 100);
+            const passed = scorePercent >= 65;
+
+            // Hide simulator pane, reveal scoreboard
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('active-exam-info').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            // Set result badge
+            const badge = document.getElementById('result-badge');
+            const scoreCircle = document.getElementById('score-circle');
+            
+            if (passed) {
+                badge.innerText = "PASSED";
+                badge.className = "inline-block px-5 py-1.5 rounded-full text-sm font-black text-white bg-emerald-500 shadow-md shadow-emerald-100";
+                scoreCircle.setAttribute('stroke', '#10b981');
+            } else {
+                badge.innerText = "FAILED";
+                badge.className = "inline-block px-5 py-1.5 rounded-full text-sm font-black text-white bg-rose-500 shadow-md shadow-rose-100";
+                scoreCircle.setAttribute('stroke', '#f43f5e');
+            }
+
+            // Set Score Ring Animation
+            document.getElementById('score-percentage').innerText = `${scorePercent}%`;
+            document.getElementById('score-raw').innerText = `${correctCount} / 65`;
+
+            // Adjust stroke offset
+            const radius = 70;
+            const circumference = 2 * Math.PI * radius; // ~439.82
+            const offset = circumference - (scorePercent / 100) * circumference;
+            scoreCircle.setAttribute('stroke-dasharray', circumference);
+            scoreCircle.setAttribute('stroke-dashoffset', offset);
+
+            // Topic Performance Breakdown calculations
+            calculateTopicBreakdown();
+
+            // Populate Review Sheet
+            renderReviewSheet();
+
+            // Notify user of completion if triggered automatically
+            if (isTimeout) {
+                showCustomModal("Time's Up!", "Your time limit was exceeded. The simulator automatically compiled and submitted your choices.", () => {});
+            }
+        }
+
+        // Categorizes and scores individual sections
+        function calculateTopicBreakdown() {
+            const topics = {};
+            
+            // Collect questions by topic
+            questionsData.forEach((q, idx) => {
+                if (!topics[q.topic]) {
+                    topics[q.topic] = { total: 0, correct: 0 };
+                }
+                topics[q.topic].total++;
+                if (selectedAnswers[idx] === q.correctIndex) {
+                    topics[q.topic].correct++;
+                }
+            });
+
+            const container = document.getElementById('section-breakdown-panel');
+            container.innerHTML = '';
+
+            for (const [name, stats] of Object.entries(topics)) {
+                const percent = Math.round((stats.correct / stats.total) * 100);
+                
+                const card = document.createElement('div');
+                card.className = "space-y-1.5";
+                
+                const labels = document.createElement('div');
+                labels.className = "flex justify-between items-center text-xs font-semibold text-gray-700";
+                labels.innerHTML = `<span>${name}</span> <span class="font-bold">${stats.correct}/${stats.total} (${percent}%)</span>`;
+
+                const barBg = document.createElement('div');
+                barBg.className = "w-full bg-gray-100 h-2 rounded-full overflow-hidden border border-gray-200";
+
+                const barFill = document.createElement('div');
+                // Color code individual bar
+                let barColor = "bg-rose-500";
+                if (percent >= 75) barColor = "bg-emerald-500";
+                else if (percent >= 60) barColor = "bg-amber-500";
+
+                barFill.className = `${barColor} h-full transition-all duration-500`;
+                barFill.style.width = `${percent}%`;
+
+                barBg.appendChild(barFill);
+                card.appendChild(labels);
+                card.appendChild(barBg);
+                container.appendChild(card);
+            }
+        }
+
+        // Filtering controls inside review sheet
+        function filterReviewList(filterType) {
+            filteredReviewType = filterType;
+            
+            // Adjust active state buttons style
+            const btns = {
+                all: document.getElementById('filter-btn-all'),
+                wrong: document.getElementById('filter-btn-wrong'),
+                correct: document.getElementById('filter-btn-correct')
+            };
+
+            for (const [key, element] of Object.entries(btns)) {
+                if (key === filterType) {
+                    element.className = "px-3 py-1.5 font-bold rounded-lg bg-blue-600 text-white shadow-sm";
+                } else {
+                    element.className = "px-3 py-1.5 font-medium rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700";
+                }
+            }
+
+            renderReviewSheet();
+        }
+
+        // Populates review interface questions with explanation text
+        function renderReviewSheet() {
+            const listPanel = document.getElementById('review-list-panel');
+            listPanel.innerHTML = '';
+
+            let renderedCount = 0;
+
+            questionsData.forEach((q, idx) => {
+                const isCorrect = (selectedAnswers[idx] === q.correctIndex);
+                
+                // Filter validation checks
+                if (filteredReviewType === 'correct' && !isCorrect) return;
+                if (filteredReviewType === 'wrong' && isCorrect) return;
+
+                renderedCount++;
+
+                const container = document.createElement('div');
+                container.className = `p-5 rounded-2xl border ${isCorrect ? 'border-emerald-100 bg-emerald-50/20' : 'border-rose-100 bg-rose-50/20'} space-y-4`;
+
+                // Header metadata
+                const header = document.createElement('div');
+                header.className = "flex justify-between items-center flex-wrap gap-2 text-xs border-b border-gray-100 pb-2.5";
+                
+                const qLabel = document.createElement('span');
+                qLabel.className = "font-extrabold text-gray-700";
+                qLabel.innerText = `Question ${idx + 1} (${q.topic})`;
+
+                const statusBadge = document.createElement('span');
+                if (isCorrect) {
+                    statusBadge.innerText = "CORRECT";
+                    statusBadge.className = "px-2 py-0.5 rounded font-black text-[10px] bg-emerald-100 text-emerald-800";
+                } else {
+                    statusBadge.innerText = "INCORRECT";
+                    statusBadge.className = "px-2 py-0.5 rounded font-black text-[10px] bg-rose-100 text-rose-800";
+                }
+
+                header.appendChild(qLabel);
+                header.appendChild(statusBadge);
+
+                // Question Text
+                const bodyText = document.createElement('p');
+                bodyText.className = "text-sm text-gray-800 font-bold leading-relaxed";
+                bodyText.innerText = q.question;
+
+                // Choices list
+                const optionsList = document.createElement('div');
+                optionsList.className = "space-y-2 text-xs";
+
+                q.options.forEach((opt, oIdx) => {
+                    const optRow = document.createElement('div');
+                    let optStyle = "p-3 rounded-xl border border-gray-150 bg-white flex items-center gap-2.5 ";
+                    
+                    let bulletChar = "A";
+                    if (oIdx === 1) bulletChar = "B";
+                    if (oIdx === 2) bulletChar = "C";
+                    if (oIdx === 3) bulletChar = "D";
+
+                    // Determine correct style colors
+                    if (oIdx === q.correctIndex) {
+                        optStyle = "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold flex items-center gap-2.5";
+                    } else if (oIdx === selectedAnswers[idx]) {
+                        optStyle = "p-3 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 font-medium flex items-center gap-2.5";
+                    }
+
+                    optRow.className = optStyle;
+                    optRow.innerHTML = `<span class="h-5 w-5 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px] shrink-0">${bulletChar}</span> <span>${opt}</span>`;
+                    optionsList.appendChild(optRow);
+                });
+
+                // Explanation area
+                const explanation = document.createElement('div');
+                explanation.className = "p-4 rounded-xl bg-white border border-gray-150 text-xs text-gray-600 leading-relaxed space-y-1";
+                explanation.innerHTML = `<div class="font-extrabold text-blue-600 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Explanation:
+                </div>
+                <div>${q.rationale}</div>`;
+
+                container.appendChild(header);
+                container.appendChild(bodyText);
+                container.appendChild(optionsList);
+                container.appendChild(explanation);
+
+                listPanel.appendChild(container);
+            });
+
+            // If empty
+            if (renderedCount === 0) {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.className = "text-center text-sm text-gray-400 py-6 font-semibold";
+                emptyMsg.innerText = "No results found matching this criteria.";
+                listPanel.appendChild(emptyMsg);
+            }
+        }
+    </script>
+</body>
+</html>
